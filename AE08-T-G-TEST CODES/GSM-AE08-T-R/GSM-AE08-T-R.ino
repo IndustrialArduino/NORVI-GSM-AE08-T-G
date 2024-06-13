@@ -28,7 +28,6 @@
 #include "RTClib.h"
 
 #define ANALOG_PIN_0 36
-
 #define INPUT1 39
 #define INPUT2 34
 #define INPUT3 35
@@ -54,13 +53,8 @@
 #define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
-
-
-
-
 RTC_DS3231 rtc; 
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-
 // Enter a MAC address for your controller below.
 // Newer Ethernet shields have a MAC address printed on a sticker on the shield
 byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
@@ -75,35 +69,23 @@ byte packetBuffer[NTP_PACKET_SIZE]; //buffer to hold incoming and outgoing packe
 
 EthernetUDP Udp;// A UDP instance to let us send and receive packets over UDP
 
-
-
-
 int analog_value = 0;
-
   
 int readSwitch(){
   analog_value = analogRead(ANALOG_PIN_0);
-
- 
   return analog_value                                                                                                ; //Read analog
 }
-
-
 
 unsigned long int timer1 = 0;
 
 // ================================================ SETUP ================================================
 void setup() {
- 
   Serial.begin(9600);
-
   Serial.println("Hello");
   Serial1.begin(9600, SERIAL_8N1, RS485_RX, RS485_TX); 
   Serial2.begin(9600, SERIAL_8N1, GSM_RX, GSM_TX); 
-
   //pinMode(GSM_RESET, OUTPUT);
   //digitalWrite(GSM_RESET, HIGH);   // RS-485 
-
   pinMode(RS485_FC, OUTPUT);
   digitalWrite(RS485_FC, HIGH);   // RS-485 
   
@@ -122,7 +104,6 @@ void setup() {
   pinMode(INPUT3, INPUT);
   pinMode(INPUT4, INPUT);
   pinMode(INPUT5, INPUT);
-
   
   Wire.begin(16,17);
 
@@ -167,28 +148,15 @@ void setup() {
   }
 
    Serial.println("Testing Modem Done");
-
-   
+  
   ETHERNET_CHECK();
-
   
   adcAttachPin(36);
 
-
-  digitalWrite(RS485_FC, HIGH);   // RS-485 
-
-
-  //
-  
+  digitalWrite(RS485_FC, HIGH);   // RS-485  
 }
 
-
-
-
-
-
 void loop() {
-  
   // read from port 0, send to port 1:
   while (Serial.available()) {
     int inByte = Serial.read();
@@ -199,16 +167,19 @@ void loop() {
     int inByte = Serial2.read();
     Serial.write(inByte);
   }
-
  
  
-  Serial.print(digitalRead(INPUT1));Serial.print(digitalRead(INPUT2));Serial.print(digitalRead(INPUT3));Serial.print(digitalRead(INPUT4));Serial.print(digitalRead(INPUT5));
+  Serial.print(digitalRead(INPUT1));
+  Serial.print(digitalRead(INPUT2));
+  Serial.print(digitalRead(INPUT3));
+  Serial.print(digitalRead(INPUT4));
+  Serial.print(digitalRead(INPUT5));
   Serial.println(""); 
-
+  
   Serial.println(""); 
-  Serial.print("Push button  ");Serial.println(readSwitch());
+  Serial.print("Push button  ");
+  Serial.println(readSwitch());
   Serial.println(""); 
-
   
   digitalWrite(OUTPUT1, HIGH);
   digitalWrite(OUTPUT2, LOW);
@@ -235,18 +206,13 @@ void loop() {
   digitalWrite(OUTPUT3, LOW);
   digitalWrite(OUTPUT4, LOW);
   
-  Serial1.println("Hello RS-485");
-   
+  Serial1.println("Hello RS-485"); 
  //Serial2.println("AT");
- delay(1000);
- 
- 
+  delay(1000);
 }
 
-
 void displayTime(void) {
-  DateTime now = rtc.now();
-     
+  DateTime now = rtc.now();   
   Serial.print(now.year(), DEC);
   Serial.print('/');
   Serial.print(now.month(), DEC);
@@ -262,7 +228,6 @@ void displayTime(void) {
   Serial.print(now.second(), DEC);
   Serial.println();
   delay(1000);
-
 }
 
 void RTC_Check(){
@@ -271,12 +236,9 @@ void RTC_Check(){
   }
  else{
  if (rtc.lostPower()) {
-  
     Serial.println("RTC lost power, lets set the time!");
     rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-    
   }
-
    
   int a=1;
   while(a<6)
@@ -287,36 +249,33 @@ void RTC_Check(){
  }
 }
 
-
-
 void SD_CHECK(){
-  uint8_t cardType = SD.cardType();
-  
+  uint8_t cardType = SD.cardType();  
     if(SD.begin(15))
- {
+  {
+  
   Serial.println("Card Mount: success");
   Serial.print("Card Type: ");
-
-    if(cardType == CARD_MMC){
-        Serial.println("MMC");
-    } else if(cardType == CARD_SD){
-        Serial.println("SDSC");
-    } else if(cardType == CARD_SDHC){
-        Serial.println("SDHC");
-    } else {
-        Serial.println("Unknown");
-    }
+  if(cardType == CARD_MMC){
+      Serial.println("MMC");
+  } 
+  else if(cardType == CARD_SD){
+      Serial.println("SDSC");
+  } 
+  else if(cardType == CARD_SDHC){
+      Serial.println("SDHC");
+  } 
+  else {
+      Serial.println("Unknown");
+  }
 
   int cardSize = SD.cardSize() / (1024 * 1024);
   Serial.printf("Card Size: %lluMB\n", cardSize);
-
   }
-
   if(!SD.begin(15))
   {
   Serial.println("NO SD card");            
   }
-
 }
 
 void ETHERNET_CHECK(){
@@ -334,11 +293,8 @@ void ETHERNET_CHECK(){
   if (Ethernet.linkStatus() == LinkOFF) {
    Serial.println("Ethernet cable is not connected.");
   }
-  }
-  
- else{
+  else{
   Udp.begin(localPort);
- 
   sendNTPpacket(timeServer); // send an NTP packet to a time server
 
   // wait to see if a reply is available
@@ -367,7 +323,6 @@ void ETHERNET_CHECK(){
     // print Unix time:
     Serial.println(epoch);
 
-
     // print the hour, minute and second:
    Serial.print("The UTC time is ");
    Serial.print((epoch  % 86400L) / 3600);
@@ -392,7 +347,6 @@ void ETHERNET_CHECK(){
   Ethernet.maintain();
  }
 }
-
 
 void sendNTPpacket(const char * address) 
 {
