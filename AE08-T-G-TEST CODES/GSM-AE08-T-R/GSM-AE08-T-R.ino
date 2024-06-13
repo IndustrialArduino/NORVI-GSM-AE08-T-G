@@ -3,8 +3,8 @@
  * 
  * 
  * RTC Check
- * micro SD Card Check CS : 15
- * Ethernet Check      CS : 5
+ * micro SD Card Check 
+ * Ethernet Check     
  * RS485
  * GSM LTE Modem AT TEst
  * All Output Turn ON Series
