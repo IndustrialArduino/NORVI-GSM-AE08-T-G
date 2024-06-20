@@ -21,11 +21,11 @@
 #include "RTClib.h"
 
 #define ANALOG_PIN_0 36
-#define INPUT1 39
-#define INPUT2 34
-#define INPUT3 35
-#define INPUT4 14
-#define INPUT5 13
+
+#define INPUT1 34
+#define INPUT2 35
+#define INPUT3 14
+#define INPUT4 13
 
 #define OUTPUT1 12
 #define OUTPUT2 2
@@ -84,7 +84,7 @@ void setup() {
   pinMode(INPUT2, INPUT);
   pinMode(INPUT3, INPUT);
   pinMode(INPUT4, INPUT);
-  pinMode(INPUT5, INPUT);
+
   Wire.begin(16,17);
 
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { // Address 0x3D for 128x64
@@ -141,7 +141,6 @@ void loop() {
   Serial.print(digitalRead(INPUT2));
   Serial.print(digitalRead(INPUT3));
   Serial.print(digitalRead(INPUT4));
-  Serial.print(digitalRead(INPUT5));
   Serial.println(""); 
   
   Serial.println(""); 
